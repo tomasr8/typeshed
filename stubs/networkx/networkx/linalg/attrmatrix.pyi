@@ -1,23 +1,45 @@
-from _typeshed import Incomplete
+from collections.abc import Sequence
+from typing import Any, Literal, overload
 
-from networkx.utils.backends import _dispatch
+from networkx.classes.graph import Graph, _Node
+from numpy.typing import DTypeLike, NDArray
+from scipy import sparse
 
-@_dispatch
+@overload
 def attr_matrix(
-    G,
-    edge_attr: Incomplete | None = None,
-    node_attr: Incomplete | None = None,
+    G: Graph[_Node],
+    edge_attr: str | None = None,
+    node_attr: str | None = None,
     normalized: bool = False,
-    rc_order: Incomplete | None = None,
-    dtype: Incomplete | None = None,
-    order: Incomplete | None = None,
-): ...
-@_dispatch
+    rc_order: None = None,
+    dtype: DTypeLike | None = None,
+    order: Literal["C", "F"] | None = None,
+) -> tuple[NDArray[Any], list[_Node]]: ...  # 2D array
+@overload
+def attr_matrix(
+    G: Graph[_Node],
+    edge_attr: str | None = None,
+    node_attr: str | None = None,
+    normalized: bool = False,
+    rc_order: Sequence[_Node] | None = None,
+    dtype: DTypeLike | None = None,
+    order: Literal["C", "F"] | None = None,
+) -> NDArray[Any]: ...  # 2D array
+@overload
 def attr_sparse_matrix(
-    G,
-    edge_attr: Incomplete | None = None,
-    node_attr: Incomplete | None = None,
+    G: Graph[_Node],
+    edge_attr: str | None = None,
+    node_attr: str | None = None,
     normalized: bool = False,
-    rc_order: Incomplete | None = None,
-    dtype: Incomplete | None = None,
-): ...
+    rc_order: None = None,
+    dtype: DTypeLike | None = None,
+) -> tuple[sparse.sparray, list[_Node]]: ...
+@overload
+def attr_sparse_matrix(
+    G: Graph[_Node],
+    edge_attr: str | None = None,
+    node_attr: str | None = None,
+    normalized: bool = False,
+    rc_order: Sequence[_Node] | None = None,
+    dtype: DTypeLike | None = None,
+) -> sparse.sparray: ...
